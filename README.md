@@ -19,7 +19,7 @@ DB_PORT=5432 # порт для подключения к БД
 
 Запустить командой:
 ```
-docker-compose docker-compose up --build -d
+docker-compose up -d --build
 ```
 
 Выполнить миграции, создать суперпользователя и собрать статику
@@ -27,6 +27,46 @@ docker-compose docker-compose up --build -d
 docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic
+```
+
+Загрузить дамп базы командой:
+```
+python manage.py loaddata fixtures/fixtures.json
+```
+
+#Примеры запросов к API
+После запуска проекта документация доступна по адресу http://localhost/redoc/
+
+**Регистрация нового пользователя**
+Отправить POST-запрос на http://localhost/api/v1/auth/signup/, передав имя и email:
+```
+{
+    "email": "",
+    "username": ""
+}
+```
+
+**Получение JWT-токена**
+Отправить POST-запрос на http://localhost/api/v1/auth/token/, передав имя и код, полученный на указанный при регистрации email:
+```
+{
+    "username": "",
+    "confirmation_code": ""
+}
+```
+
+**Добавление нового произведения**
+Отправить, используя полученный токен, POST-запрос на http://localhost/api/v1/titles/, передав информацию о произведении:
+```
+{
+    {
+        "name": "",
+        "year": 0,
+        "description": "",
+        "genre": [""],
+        "category": ""
+    }
+}
 ```
 
 Технологии которые использовались:
